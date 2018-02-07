@@ -132,15 +132,20 @@
 // let {length: len} = 'hello';
 // console.log(len);
 
-let x=1, y=2;
-[x,y] = [y,x];
-console.log(`${x} ${y}`);
+// let x=1, y=2;
+// [x,y] = [y,x];
+// console.log(`${x} ${y}`);
+// 
+// let jsonData = {
+//   id: 42,
+//   status: "ok",
+//   data: [867,5389]
+// };
+// let { id, status, data: number } = jsonData;
+// console.log(id,status, number);
 
-
-
-
-
-
+console.log(`in js this
+  is legal`);
 
 
 
