@@ -135,7 +135,7 @@
 // let x=1, y=2;
 // [x,y] = [y,x];
 // console.log(`${x} ${y}`);
-// 
+//
 // let jsonData = {
 //   id: 42,
 //   status: "ok",
@@ -144,8 +144,54 @@
 // let { id, status, data: number } = jsonData;
 // console.log(id,status, number);
 
-console.log(`in js this
-  is legal`);
+// console.log(`in js this
+//   is legal`);
+
+// ## string template
+// let total = 30, num=2;
+// let sender = "<script>alert('abc')</script>";
+// let msg = passthru`The total is ${total} (${total*1.05} with tax)`;
+// let message = SaferHTML`<p>${sender} has sent you ${num} message</p>`;
+//
+// function passthru(literals){
+//   let result = '';
+//   let i=0;
+//   while(i<literals.length){
+//     result += literals[i++];
+//     if (i<arguments.length){
+//       result += arguments[i];
+//     }
+//   }
+//   return result;
+// }
+// function SaferHTML(templateData){
+//   let s = templateData[0];
+//   console.log(arguments);
+//   for(let i=1; i<arguments.length; i++){
+//     let arg = String(arguments[i]);
+//     // escape char
+//     s += arg.replace(/&/g, "&amp;")
+//             .replace(/</g, "&lt;")
+//             .replace(/>/g, "&gt;");
+//     s += templateData[i];
+//   }
+//   return s;
+// }
+//
+// console.log(msg);
+// console.log(message);
+
+console.log(String.raw`hi\n`);
+
+var pattern = /(\w+)/g;
+var result = "visit my blog".match(pattern);
+console.log(result);
+
+
+
+
+
+
 
 
 
