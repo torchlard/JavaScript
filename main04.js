@@ -1,3 +1,4 @@
+
 // var Circle = function(radius){
 //   this._radius = radius;
 // };
@@ -135,7 +136,7 @@
 // let x=1, y=2;
 // [x,y] = [y,x];
 // console.log(`${x} ${y}`);
-//
+// 
 // let jsonData = {
 //   id: 42,
 //   status: "ok",
@@ -144,53 +145,28 @@
 // let { id, status, data: number } = jsonData;
 // console.log(id,status, number);
 
-// console.log(`in js this
-//   is legal`);
+// var text = "d4324fds345advd32143";
+// console.log("abc \v");
+// console.log(text.match(/[a-z]{2,}/g));
+// console.log(text.match(/\d+/));
+// console.log("fdsa100%76987godd".match(/\d+/g));
 
-// ## string template
-// let total = 30, num=2;
-// let sender = "<script>alert('abc')</script>";
-// let msg = passthru`The total is ${total} (${total*1.05} with tax)`;
-// let message = SaferHTML`<p>${sender} has sent you ${num} message</p>`;
-//
-// function passthru(literals){
-//   let result = '';
-//   let i=0;
-//   while(i<literals.length){
-//     result += literals[i++];
-//     if (i<arguments.length){
-//       result += arguments[i];
-//     }
-//   }
-//   return result;
+// console.log(Number.parseInt(4.5));
+// console.log(Number.parseFloat("4.5"));
+
+// function log(x, y="world"){
+//   console.log(x,y);
 // }
-// function SaferHTML(templateData){
-//   let s = templateData[0];
-//   console.log(arguments);
-//   for(let i=1; i<arguments.length; i++){
-//     let arg = String(arguments[i]);
-//     // escape char
-//     s += arg.replace(/&/g, "&amp;")
-//             .replace(/</g, "&lt;")
-//             .replace(/>/g, "&gt;");
-//     s += templateData[i];
-//   }
-//   return s;
-// }
-//
-// console.log(msg);
-// console.log(message);
+// log("wow");
 
-console.log(String.raw`hi\n`);
-
-var pattern = /(\w+)/g;
-var result = "visit my blog".match(pattern);
-console.log(result);
-
-
-
-
-
+function add(... values){
+  let sum=0;
+  for(var val of values){
+    sum += val;
+  }
+  return sum;
+}
+console.log(add(1,3,5,7));
 
 
 
