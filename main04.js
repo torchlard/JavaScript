@@ -159,16 +159,25 @@
 // }
 // log("wow");
 
-function add(... values){
-  let sum=0;
-  for(var val of values){
-    sum += val;
+// function add(... values){
+//   let sum=0;
+//   for(var val of values){
+//     sum += val;
+//   }
+//   return sum;
+// }
+// console.log(add(1,3,5,7));
+
+var x = 10;
+var obj = {
+  x: 20,
+  f: function(){
+    console.log(this.x);
+    var foo = function(){ console.log(this.x); }
+    foo();
   }
-  return sum;
 }
-console.log(add(1,3,5,7));
-
-
+obj.f();  // 20 10: no object in front
 
 
 
