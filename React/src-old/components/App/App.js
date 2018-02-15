@@ -1,8 +1,7 @@
 import React from 'react';
-import { Link, IndexLink } from 'react-router';
-import styles from './appStyles';
+import {Link, IndexLink} from 'react-router';
+import styles from './appStyles.js';
 import NavLink from '../NavLink';
-import PropTypes from 'prop-types';
 
 const App = (props) => (
   <div>
@@ -11,15 +10,16 @@ const App = (props) => (
       <li><IndexLink to="/" activeClassName="active">Home</IndexLink></li>
       <li><Link to="/about" activeStyle={{ color: 'green' }}>About</Link></li>
       <li><Link to="/repos/react-router" activeStyle={styles.active}>Repos</Link></li>
-      <li><Link to="/user" activeClassName="active">User</Link></li>
+      <li><Link to="/user" activeClassName="active">Users</Link></li>
       <li><NavLink to="/contacts">Contacts</NavLink></li>
     </ul>
     {props.children}
   </div>
 );
 
-App.propTypes = {
-  children: PropTypes.object,
+App.prototype = {
+  children: React.ProtoType.object
 };
 
 export default App;
+
