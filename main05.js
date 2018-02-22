@@ -1,14 +1,3 @@
-// var my_object = {
-//   '0': 'zero',
-//   '1': 'one',
-//   '2': 'two',
-//   '3': 'three',
-//   length: 4
-// };
-// 
-// var unbound = Array.prototype.slice;
-// var slicee = Function.prototype.call.bind(unbound);
-// console.log(slicee([1,2,3,4],2));
 
 function toString () {
   return `[${this.name}, ${this.age}]`;
@@ -42,3 +31,8 @@ var any = {}
 console.log(any);
 
 
+function aa(i, ...rest){
+  console.log(i);
+  console.log(...rest);
+}
+aa(1,2,3,4);
