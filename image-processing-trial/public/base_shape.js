@@ -15,6 +15,7 @@ class Base_Shape {
     this.baseImage = targetImage;
     this.layer = new Konva.Layer();
     this.anchorLayer = new Konva.Layer();
+    this.x=0, this.y=0, this.width=0, this.height=0;
   }
   
   resize() {
@@ -25,6 +26,8 @@ class Base_Shape {
       this.buildAnchor(coor[i], coor[i+1], i/2);
     }
     this.baseImage.setDraggable(true);
+    
+    return this.anchorLayer;
   }
   
   updatePicture(coor){
@@ -33,6 +36,10 @@ class Base_Shape {
     this.baseImage.setWidth(coor[2]);
     this.baseImage.setHeight(coor[3]);
     this.layer.draw()
+  }
+  
+  cropPicture(coor){
+    
   }
   
   buildPicture() {
@@ -117,22 +124,29 @@ class Base_Shape {
     
     this.anchorLayer.add(square);
   }
-
-  // get baseImage(){
-  //   return this.baseImage;
-  // }
-  // 
-  // get anchorLayer(){
-  //   return this.anchorLayer;
-  // }
-
- // set baseImage(img){
- //   this.baseImage = img;
- // }
-
-
-
-
+  
+  destroyAll(){
+    this.layer.destroy();
+    this.anchorLayer.destroy();
+  }
+  
+  darken(bright){
+    this.baseImage.cache();
+    this.baseImage.filters([Konva.Filters.Brighten]);
+    if(bright){
+      this.baseImage.brightness(-0.3);
+    } else {
+      this.baseImage.brightness(0);
+    }
+    this.layer.draw();
+  }
+  
+  duplicateLayer(){
+    this.newLayer = new Konva.Layer();
+    this.newLayer.add(this.baseImage.clone());
+    
+    return this.newLayer;
+  }
 
  
 }
