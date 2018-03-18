@@ -1,0 +1,22 @@
+#box {
+  background-color: #faf5f5;
+  border: 1px dotted black;
+  position: absolute;
+}
+
+/* canvas {
+  border: 1px dotted black;
+} */
+
+#show-pic {
+  display: block;
+  width: 400px;
+  margin: auto;
+}
+
+#save {
+  margin-top: 600px;
+}
+
+
+
