@@ -1,98 +1,14 @@
 'use-strict';
-// const eventWindowLoaded = () => canvasApp()
-// window.addEventListener('load', eventWindowLoaded, false);
 
-// const theCanvas = document.getElementById("canvas");
-// const context = theCanvas.getContext("2d");
-// const canvasHeight = theCanvas.height;
-// const canvasWidth = theCanvas.width;
-// const canvasRect = theCanvas.getBoundingClientRect();
-// const canvasTop = canvasRect.top;
-// const canvasLeft = canvasRect.left;
+// allow max, min on array by array.max(), array.min()
+Array.prototype.max = function(){
+  return Math.max.apply(null, this);
+}
+Array.prototype.min = function(){
+  return Math.min.apply(null, this);
+}
 
-// class Basic_image {
-//   constructor(obj, height, width) {
-//     this.obj = obj;
-//     this.height = height;
-//     this.width = width;
-//     this.x = (canvasWidth-this.width)/2;
-//     this.y = (canvasHeight-this.height)/2;
-//   }
-//   draw(){
-//     context.clearRect(0,0, canvasWidth,canvasHeight);
-//     context.drawImage(this.obj, this.x , this.y, this.width, this.height );
-//   }
-//   resize(width, height){
-//     this.width = width;
-//     this.height = height;
-//     this.draw();
-//   }
-//   move(dx, dy){
-//     this.x += dx; this.y += dy;
-//     this.draw();
-//     // if (this.x+dx >=0 && this.x+dx <= canvasWidth-this.width &&
-//     //   this.y+dy >=0 && this.y+dy <= canvasHeight-this.height){
-//     // }
-//   }
-//   get_enterObj(mouse_x, mouse_y){
-//     if (mouse_x >= this.x && mouse_x <= this.x+this.width &&
-//       mouse_y >= this.y && mouse_y <= this.y+this.height){
-//         return true
-//       }
-//     return false;
-//   }
-// }
-//
-// let object_list = [], last_x, last_y;
-// const spaceShip = new Image();
-// let flower = new Basic_image(spaceShip, 300, 300);
-// const eventShipLoaded = () => {
-//   object_list.push(flower);
-//   flower.draw();
-//   // flower.move(100,200)
-// }
-//
-// const eventImgMove = (event, lastX, lastY) => {
-//   let mouse_x = event.clientX - canvasLeft;
-//   let mouse_y = event.clientY - canvasTop;
-//
-//   // console.log(mouse_x, mouse_y, last_x, last_y);
-//
-//   if(!last_x && !lastY){
-//     last_x = lastX, last_y = lastY;
-//   }
-//   let dx = mouse_x-last_x, dy = mouse_y-last_y;
-//   console.log(dx,dy);
-//
-//   last_x = mouse_x, last_y = mouse_y;
-//   if(dx && dy){
-//     flower.move(dx, dy);
-//   }
-//   // console.log(dx,dy);
-// }
-//
-// // ======== Main ===========
-//
-// spaceShip.src = "big_flowers.jpg";
-// spaceShip.addEventListener('load', eventShipLoaded, false);
-//
-// let eventImgMove_wrap;
-//
-// theCanvas.onmousedown = (event) => {
-//   console.log('down');
-//   let mouse_x = event.clientX - canvasLeft;
-//   let mouse_y = event.clientY - canvasTop;
-//   if (flower.get_enterObj(mouse_x, mouse_y)) {
-//     console.log('enter');
-//     eventImgMove_wrap = (event) => eventImgMove(event, mouse_x, mouse_y)
-//     theCanvas.addEventListener('mousemove', eventImgMove_wrap, false);
-//   }
-// }
-// window.onmouseup = () => {
-//   console.log('up');
-//   theCanvas.removeEventListener('mousemove', eventImgMove_wrap , false);
-// }
-
+let baseImage;
 const stage = new Konva.Stage({
   container: 'container',
   width: 500,
@@ -100,78 +16,122 @@ const stage = new Konva.Stage({
 });
 
 const layer = new Konva.Layer()
+const anchorLayer = new Konva.Layer()
 
-// const circle = new Konva.Circle({
-//   x: stage.getWidth()/2,
-//   y: stage.getHeight()/2,
-//   radius: 70,
-//   fill: 'red',
-//   stroke: 'black',
-//   strokeWidth: 4
-// });
-//
-// const triangle = new Konva.Shape({
-//   sceneFunc: function(context){
-//     context.beginPath();
-//     context.moveTo(20,50);
-//     context.lineTo(220, 80);
-//     context.quadraticCurveTo(150,100,260,170);
-//     context.closePath();
-//
-//     context.fillStrokeShape(this);
-//   },
-//   fill: '#00D2FF',
-//   stroke: 'black',
-//   strokeWidth: 4
-// });
-//
-// let amplitude = 100, period = 2000;
-// let centerX = stage.getWidth()/2;
-//
-// const anim = new Konva.Animation((frame) => {
-//   circle.setX(amplitude * Math.sin(frame.time*2 * Math.PI/period) + centerX)
-// }, layer);
-//
-// layer.add(triangle)
-// const tween = new Konva.Tween({
-//   node: triangle,
-//   duration: 1,
-//   x: 140,
-//   y: 90,
-//   fill: 'red',
-//   rotation: Math.PI*2,
-//   opacity: 1,
-//   strokeWidth: 6,
-//   scaleX: 1.5
-// });
-//
-// layer.add(circle);
+const buildAnchor = (x,y, i) => {
+  // let context = anchorLayer.getContext();
+  // context.clear();
+  
+  let square = new Konva.Rect({
+    x: x-7,
+    y: y-7,
+    width: 15,
+    height: 15,
+    fill: 'rgb(139, 139, 139)',
+    stroke: 'black',
+    strokeWidth: 1,
+    draggable: true,
+    id: i,
+    name: 'anchor'
+  });
+  
+  square.on ('mouseover', () => {
+    // console.log('over');
+    square.fill('rgb(226,226,226)');
+    anchorLayer.draw();
+  });
+  square.on('mouseout', () => {
+    // console.log('out');
+    square.fill('rgb(139,139,139)');
+    anchorLayer.draw();
+  });
+  
+  square.on('dragmove', () => {
+    let coor = updateAnchor(i);
+    updatePicture(coor);
+  });
+  
+  anchorLayer.add(square);
+}
 
 const imageObj = new Image();
 imageObj.src = './big_flowers.jpg';
-imageObj.onload = () => {
-  let yoda = new Konva.Image({
+
+const updateAnchor = (i) => {
+  // let point = stage.find(`#${i}`)[0];
+  let point = stage.find('.anchor');
+  let x = point[i].getX(), y = point[i].getY();
+  // console.log(x,y)
+  switch(i){
+    case 0:
+      point[1].setY(y);
+      point[2].setX(x);
+      break;
+    case 1:
+      point[0].setY(y);
+      point[3].setX(x);
+      break;
+    case 2:
+      point[3].setY(y);
+      point[0].setX(x);
+      break;
+    case 3:
+      point[2].setY(y);
+      point[1].setX(x);
+      break;
+  }
+
+  let x_list = [], y_list = [];
+  point.each((shape) => {
+    x_list.push(shape.getX());
+    y_list.push(shape.getY()); 
+  });
+  return [x_list.min()+7, y_list.min()+7, Math.abs(point[0].getX()-point[1].getX()), Math.abs(point[1].getY()-point[3].getY()) ];
+}
+
+
+const buildPicture = () => {
+
+  baseImage = new Konva.Image({
     x: 50,
     y: 50,
     image: imageObj,
-    width: 100,
-    height: 100,
-    draggable: true,
+    width: 300,
+    height: 300,
+    draggable: false,
   });
-  yoda.shadowColor('green');
-  console.log(yoda.getAbsoluteOpacity());
-  layer.add(yoda)
-  stage.add(layer);
+  // baseImage.shadowColor('green');
+  
+  baseImage.on('dragmove', () => {
+    let points = stage.find('.anchor');
+    let width = baseImage.getWidth(), height = baseImage.getHeight();
+    let x = baseImage.getX(), y = baseImage.getY();
+
+    points[0].setX(x-7); points[0].setY(y-7);
+    points[1].setX(x-7+width); points[1].setY(y-7);
+    points[2].setX(x-7); points[2].setY(y-7+height);
+    points[3].setX(x-7+width); points[3].setY(y-7+height);
+    anchorLayer.draw();
+  })
+} 
+
+const updatePicture = (coor) => {
+  baseImage.setX(coor[0]);
+  baseImage.setY(coor[1]);
+  baseImage.setWidth(coor[2]);
+  baseImage.setHeight(coor[3]);
+  layer.draw()
 }
 
-// imageObj.draggable(true)
+const buildCropLayer = () => {
+  
+}
 
-// anim.start()
-// setTimeout(() => tween.play(), 500 )
-
-// circle.on('mousedown', () => console.log('down'))
-// circle.on('mouseup', () => console.log('up'))
-// circle.draggable("true")
+imageObj.onload = () => {
+  buildPicture();
+  layer.add(baseImage)
+  stage.add(layer);
+}
 
 
 document.getElementById("save").onclick = () => {
@@ -179,29 +139,27 @@ document.getElementById("save").onclick = () => {
   console.log(json);
 }
 
+document.getElementById("resize").onclick = () => {
+  let x = baseImage.getX(), y = baseImage.getY();
+  let width = baseImage.getWidth(), height = baseImage.getHeight();
+  let coor = [x,y, x+width,y, x,y+height, x+width,y+height];
+  for(let i=0; i<coor.length; i+=2){
+    buildAnchor(coor[i], coor[i+1], i/2);
+  }
+  baseImage.setDraggable(true);
 
-// {"attrs":{"width":500,"height":500},
-// "className":"Stage",
-// "children":
-//   [{"attrs":{},
-//   "className":"Layer",
-//   "children":[{"attrs":
-//     {"fill":"rgba(255,0,0,1)","stroke":"black","strokeWidth":6,"x":140,"y":90,"rotation":6.283185307179586,"scaleX":1.5},
-//     "className":"Shape"},
-//     {"attrs":{"x":221,"y":251,"radius":70,"fill":"red","stroke":"black","strokeWidth":4,"draggable":"true"},
-//     "className":"Circle"}]
-//   }]
-// }
+  stage.add(anchorLayer);
+}
+
+document.getElementById("crop").onclick = () => {
+  buildCropLayer();
+}
+
+document.getElementById("stop").onclick = () => {
+  // let context = anchorLayer.getContext();
+  // context.clear()
+  baseImage.setDraggable(false);
+  anchorLayer.destroy()
+}
 
 
-
-
-
-
-
-// context.fillStyle = '#aaaaaa';
-// context.fillRect(0,0,200,200);
-// context.fillStyle = '#000000';
-// context.font = '20px _sans';
-// context.textBaseline = 'top';
-// context.fillText("Canvas!",0,0);

@@ -1,5 +1,9 @@
-let a = [1,2,3];
-let b = [7,8,9];
-let c = a.map(function(e,i)){
-  console.log(e+" "+b[i]);
-}
+(
+  function (msg){
+  console.log(msg || "nothing for today!!")
+})();
+
+// somefunc("js rocks")
+// somefunc()
+
+
