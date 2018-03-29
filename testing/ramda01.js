@@ -16,17 +16,17 @@
 
 
 // // pipe, compose
-// const multiply = (a,b) => a*b
-// const addOne = x => x+1
-// const square = x => x*x
-// const operate = R.pipe(
-//   multiply, addOne, square
-// )
-// const operate2 = R.compose(
-//   square, addOne, multiply
-// )
-//
-// console.log(operate2(2,4));
+const multiply = (a,b) => a*b
+const addOne = x => x+1
+const square = x => x*x
+const operate = R.pipe(
+  multiply, addOne, square
+)
+const operate2 = R.compose(
+  square, addOne, multiply
+)
+
+console.log(operate2(2,4));
 
 
 // // normal

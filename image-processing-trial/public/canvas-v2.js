@@ -8,33 +8,18 @@ Array.prototype.min = function(){
   return Math.min.apply(null, this);
 }
 
-let baseImage;
-const stage = new Konva.Stage({
-  container: 'container',
-  width: 500,
-  height: 500
-});
+class PicAnchor {
+  constructor(image, layer, anchor){
+    this.image = image;
+    this.imageLayer = layer;
+    this.anchorLayer = anchor;
+  }
+}
 
-const layer = new Konva.Layer()
-const anchorLayer = new Konva.Layer()
-
-const buildAnchor = (x,y, i) => {
-  // let context = anchorLayer.getContext();
-  // context.clear();
+const buildAnchor = (x,y,i, anchorLayer, baseImage, imageLayer) => {
   
-  let square = new Konva.Rect({
-    x: x-7,
-    y: y-7,
-    width: 15,
-    height: 15,
-    fill: 'rgb(139, 139, 139)',
-    stroke: 'black',
-    strokeWidth: 1,
-    draggable: true,
-    id: i,
-    name: 'anchor'
-  });
-  
+  let point = 
+  // resize handler hint
   square.on ('mouseover', () => {
     // console.log('over');
     square.fill('rgb(226,226,226)');
@@ -46,20 +31,21 @@ const buildAnchor = (x,y, i) => {
     anchorLayer.draw();
   });
   
+  // when anchor move, update anchor and pic
   square.on('dragmove', () => {
-    let coor = updateAnchor(i);
-    updatePicture(coor);
+    updateAnchor(i, anchorLayer);
+    let coor = picFollowAnchor(point);
+    updatePicture(coor, baseImage, imageLayer);
   });
   
-  anchorLayer.add(square);
+  // anchor.add(square);
+  return square;
 }
 
-const imageObj = new Image();
-imageObj.src = './big_flowers.jpg';
 
-const updateAnchor = (i) => {
-  // let point = stage.find(`#${i}`)[0];
-  let point = stage.find('.anchor');
+// align 4 corners
+const updateAnchor = (i, anchorLayer) => {
+  let point = anchorLayer.find('.anchor');
   let x = point[i].getX(), y = point[i].getY();
   // console.log(x,y)
   switch(i){
@@ -80,30 +66,25 @@ const updateAnchor = (i) => {
       point[1].setX(x);
       break;
   }
+}
 
+// calc how pic follow anchor
+const picFollowAnchor = (point) => {
   let x_list = [], y_list = [];
   point.each((shape) => {
     x_list.push(shape.getX());
     y_list.push(shape.getY()); 
   });
+
   return [x_list.min()+7, y_list.min()+7, Math.abs(point[0].getX()-point[1].getX()), Math.abs(point[1].getY()-point[3].getY()) ];
 }
 
 
-const buildPicture = () => {
-
-  baseImage = new Konva.Image({
-    x: 50,
-    y: 50,
-    image: imageObj,
-    width: 300,
-    height: 300,
-    draggable: false,
-  });
+const movePicWithAnchor = (baseImage, anchorLayer) => {
   // baseImage.shadowColor('green');
   
   baseImage.on('dragmove', () => {
-    let points = stage.find('.anchor');
+    // let points = Layer.find('.anchor');
     let width = baseImage.getWidth(), height = baseImage.getHeight();
     let x = baseImage.getX(), y = baseImage.getY();
 
@@ -115,37 +96,83 @@ const buildPicture = () => {
   })
 } 
 
-const updatePicture = (coor) => {
+const updatePicture = (coor, baseImage, imageLayer) => {
   baseImage.setX(coor[0]);
   baseImage.setY(coor[1]);
   baseImage.setWidth(coor[2]);
   baseImage.setHeight(coor[3]);
-  layer.draw()
+  imageLayer.draw()
 }
+
+
 
 const buildCropLayer = () => {
   let cropShape = buildPicture()
 }
 
+// ===== Define elements =======
+const anchor_sq =  new Konva.Rect({
+  x: x-7,
+  y: y-7,
+  width: 15,
+  height: 15,
+  fill: 'rgb(139, 139, 139)',
+  stroke: 'black',
+  strokeWidth: 1,
+  draggable: true,
+  name: 'anchor'
+  // id: i,
+});
+
+const getImage = imageObj => 
+  new Konva.Image({
+    x: 50,
+    y: 50,
+    image: imageObj,
+    width: 300,
+    height: 300,
+    draggable: false,
+  });
+  
+const stage = new Konva.Stage({
+  container: 'container',
+  width: 500,
+  height: 500
+});
+
+// ========= MAIN ==========
+
+const imageObj = new Image();
+imageObj.src = './big_flowers.jpg';
+
+let baseRef;
+
 imageObj.onload = () => {
-  buildPicture();
+  let baseImage = getImage(imageObj)
+  let layer = new Konva.Layer()
   layer.add(baseImage)
   stage.add(layer);
+  baseRef = new PicAnchor(baseImage, layer, new Konva.Layer())
 }
 
+// document.getElementById("save").onclick = () => {
+//   let json = stage.toJSON()
+//   console.log(json);
+// }
 
-document.getElementById("save").onclick = () => {
-  let json = stage.toJSON()
-  console.log(json);
-}
-
-document.getElementById("resize").onclick = () => {
+document.getElementById("resizeBaseImage").onclick = () => {
+  let baseImage = baseRef.image;
+  let anchorLayer = baseRef.anchorLayer;
+  
+  // constrcut anchors
   let x = baseImage.getX(), y = baseImage.getY();
   let width = baseImage.getWidth(), height = baseImage.getHeight();
   let coor = [x,y, x+width,y, x,y+height, x+width,y+height];
   for(let i=0; i<coor.length; i+=2){
-    buildAnchor(coor[i], coor[i+1], i/2);
+    anchorLayer.add(buildAnchor(coor[i], coor[i+1], i/2, anchorLayer, baseImage, baseRef.imageLayer )) ;
   }
+  // register pic movement
+  movePicWithAnchor(baseImage, anchorLayer);
   baseImage.setDraggable(true);
 
   stage.add(anchorLayer);
@@ -158,8 +185,8 @@ document.getElementById("crop").onclick = () => {
 document.getElementById("stop").onclick = () => {
   // let context = anchorLayer.getContext();
   // context.clear()
-  baseImage.setDraggable(false);
-  anchorLayer.destroy()
+  baseRef.image.setDraggable(false);
+  baseRef.anchorLayer.destroy()
 }
 
 
