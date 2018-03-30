@@ -23,12 +23,60 @@
 <!-- <br>
 <button id="camera">camera</button>
 <video src=""></video> -->
-<button id="save">save</button>
 <button id="crop">crop</button>
+<button id="save">save crop</button>
 <button id="resize">resize</button>
-<button id="rotate">rotate</button>
-<button id="stop">stop</button>
+<button id="stop">stop resize</button>
+<button id="grey">grey</button>
+<button id="color">color</button>
+<button id="invert">invert</button>
+<button id="mask">mask</button>
 
+<div class="slidingbar">
+
+  <p id="first-control">
+    <label for="gs">Brightness</label>
+    <input id="gs" name="gs" type="range" min=-1 max=1 step="0.01" value=0 oninput="changeBrightness(this.value)">
+  </p>
+  <p>
+    <label for="ct">Contrast</label>
+    <input id="ct" name="ct" type="range" min=-100 max=100 value=0 oninput="changeContrast(this.value)">
+  </p>
+  <p>
+    <label for="blur">Blur</label>
+    <input id="blur" name="blur" type="range" min=0 max=10 value=0 oninput="changeBlur(this.value)">
+  </p>
+  <p>
+    <label for="huer">Hue</label>
+    <input id="huer" name="huer" type="range" min=0 max=360 value=0 onchange="changeHue(this.value)">
+  </p>
+  <p>
+    <label for="saturate">Saturate</label>
+    <input id="saturate" name="saturate" type="range" min=0 max=1 value=0 step="0.01" oninput="changeSaturation(this.value)">
+  </p>
+
+  <p>
+    <label for="opacity">Lightness</label>
+    <input id="lightness" name="opacity" type="range" min=-1 max=1 value=0 step="0.01" oninput="changeLightness(this.value)">
+  </p>
+
+  <p>
+    <label for="invert">Mask</label>
+    <input id="invert" name="invert" type="range" min=0 max=1 step=0.01 value=0.5 oninput="changeMask(this.value)">
+  </p>
+
+  <p>
+    <label for="br">Rotate</label>
+    <input id="rot" name="br" type="range" min=0 max=359 value=0 oninput="changeRotation(this.value)">
+  </p>
+
+
+  <p>
+    <label for="sepia">Sepia</label>
+    <input id="sepia" name="sepia" type="range" min=0 max=100 value=0>
+  </p>
+
+</div>
 
 </body>
 <!-- <script type="text/javascript" src="./index.js"></script> -->

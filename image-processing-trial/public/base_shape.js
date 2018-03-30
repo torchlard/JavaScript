@@ -10,14 +10,15 @@ Array.prototype.min = function(){
 
 
 class Base_Shape {
-  
+
   constructor(targetImage){
     this.baseImage = targetImage;
+    this.turnColorScale();
     this.layer = new Konva.Layer();
     this.anchorLayer = new Konva.Layer();
     this.x=0, this.y=0, this.width=0, this.height=0;
   }
-  
+
   resize() {
     let x = this.baseImage.getX(), y = this.baseImage.getY();
     let width = this.baseImage.getWidth(), height = this.baseImage.getHeight();
@@ -26,18 +27,26 @@ class Base_Shape {
       this.buildAnchor(coor[i], coor[i+1], i/2);
     }
     this.baseImage.setDraggable(true);
-    
+
+    // console.log(this.baseImage);
+    // this.baseImage.remove();
+    // this.layer.add(this.baseImage)
+
     return this.anchorLayer;
   }
-  
+
   updatePicture(coor){
     this.baseImage.setX(coor[0]);
     this.baseImage.setY(coor[1]);
     this.baseImage.setWidth(coor[2]);
     this.baseImage.setHeight(coor[3]);
+
+    // console.log(this.layer.getWidth(),this.layer.getHeight());
+
     this.layer.draw()
+    // this.baseImage.draw()
   }
-  
+
   cropPicture(coor, size){
     this.baseImage.crop({
       x: coor[0],
@@ -45,25 +54,33 @@ class Base_Shape {
       width: size[0],
       height: size[1]
     });
-    // this.baseImage.draw();
+    // this.baseImage.cropWidth(size[0]);
+    // this.baseImage.cropHeight(size[1]);
+
+    this.baseImage.setWidth(size[0]);
+    this.baseImage.setHeight(size[1]);
+    this.baseImage.setX(coor[0]);
+    this.baseImage.setY(coor[1]);
+
+    this.baseImage.draw();
   }
-  
+
   buildPicture() {
     // this.baseImage.shadowColor('green');
     this.layer.add(this.baseImage);
-    
+
     this.baseImage.on('dragmove', () => {
       let points = this.anchorLayer.find('.anchor');
       let width = this.baseImage.getWidth(), height = this.baseImage.getHeight();
       let x = this.baseImage.getX(), y = this.baseImage.getY();
-      
+
       points[0].setX(x-7); points[0].setY(y-7);
       points[1].setX(x-7+width); points[1].setY(y-7);
       points[2].setX(x-7); points[2].setY(y-7+height);
       points[3].setX(x-7+width); points[3].setY(y-7+height);
       this.anchorLayer.draw();
     });
-    
+
     return this.layer;
   }
 
@@ -94,13 +111,13 @@ class Base_Shape {
     let x_list = [], y_list = [];
     point.each((shape) => {
       x_list.push(shape.getX());
-      y_list.push(shape.getY()); 
+      y_list.push(shape.getY());
     });
     return [x_list.min()+7, y_list.min()+7, Math.abs(point[0].getX()-point[1].getX()), Math.abs(point[1].getY()-point[3].getY()) ];
   }
 
   buildAnchor(x,y, i){
-    
+
     let square = new Konva.Rect({
       x: x-7,
       y: y-7,
@@ -113,7 +130,7 @@ class Base_Shape {
       id: i,
       name: 'anchor'
     });
-    
+
     square.on ('mouseover', () => {
       square.fill('rgb(226,226,226)');
       this.anchorLayer.draw();
@@ -122,39 +139,94 @@ class Base_Shape {
       square.fill('rgb(139,139,139)');
       this.anchorLayer.draw();
     });
-    
+
     square.on('dragmove', () => {
       let coor = this.updateAnchor(i);
       this.updatePicture(coor);
     });
-    
+
     this.anchorLayer.add(square);
   }
-  
+
   destroyAll(){
     this.layer.destroy();
     this.anchorLayer.destroy();
   }
-  
-  darken(bright){
-    this.baseImage.cache();
-    this.baseImage.filters([Konva.Filters.Brighten]);
-    if(bright){
-      this.baseImage.brightness(-0.45);
-    } else {
-      this.baseImage.brightness(0);
-    }
-    this.layer.draw();
-  }
-  
-  duplicateLayer(){
-    let newLayer = new Konva.Layer();
-    newLayer.add(this.baseImage.clone());
-    
-    return newLayer;
+
+
+  // duplicateLayer(){
+  //   let newLayer = new Konva.Layer();
+  //   newLayer.add(this.baseImage.clone());
+  //
+  //   return newLayer;
+  // }
+
+  rotate(theta){
+    this.baseImage.rotation(theta)
+    this.layer.draw()
   }
 
- 
+// ========= colors =========
+
+  brightness(bright=0){
+    this.baseImage.brightness(bright);
+    this.layer.draw();
+  }
+  contrast(val=0){
+    this.baseImage.contrast(val);
+    this.layer.draw();
+  }
+
+  blur(val=0){
+    this.baseImage.blurRadius(val);
+    this.layer.draw();
+  }
+
+  hue(val){
+    this.baseImage.hue(val);
+    this.layer.draw();
+  }
+  saturation(val){
+    this.baseImage.saturation(val);
+    this.layer.draw();
+  }
+  lightness(val){
+    this.baseImage.luminance(val);
+    this.layer.draw();
+  }
+
+  turnGreyScale(){
+    this.baseImage.cache();
+    this.baseImage.filters([Konva.Filters.Grayscale, Konva.Filters.Blur, Konva.Filters.Brighten, Konva.Filters.Contrast]);
+    this.layer.draw()
+  }
+
+  turnColorScale(){
+    // cache will affect scaling
+    this.baseImage.cache();
+    this.baseImage.filters([Konva.Filters.Brighten, Konva.Filters.Contrast, Konva.Filters.Blur, Konva.Filters.HSL, Konva.Filters.Noise]);
+    if (this.layer) this.layer.draw();
+  }
+
+  invert(){
+    this.baseImage.cache();
+    this.baseImage.filters([Konva.Filters.Brighten, Konva.Filters.Contrast, Konva.Filters.Blur, Konva.Filters.HSL, Konva.Filters.Invert]);
+    this.layer.draw()
+  }
+
+  turnMaskScale(){
+    this.baseImage.cache();
+    this.baseImage.filters([Konva.Filters.Mask, Konva.Filters.Brighten, Konva.Filters.Contrast, Konva.Filters.Blur, Konva.Filters.Threshold]);
+    this.mask(0.5);
+  }
+
+  mask(value){
+    this.baseImage.threshold(value);
+    this.layer.draw();
+  }
+
+
+
 }
 
 
