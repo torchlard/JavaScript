@@ -38,8 +38,14 @@ class Base_Shape {
     this.layer.draw()
   }
   
-  cropPicture(coor){
-    
+  cropPicture(coor, size){
+    this.baseImage.crop({
+      x: coor[0],
+      y: coor[1],
+      width: size[0],
+      height: size[1]
+    });
+    // this.baseImage.draw();
   }
   
   buildPicture() {
@@ -134,7 +140,7 @@ class Base_Shape {
     this.baseImage.cache();
     this.baseImage.filters([Konva.Filters.Brighten]);
     if(bright){
-      this.baseImage.brightness(-0.3);
+      this.baseImage.brightness(-0.45);
     } else {
       this.baseImage.brightness(0);
     }
@@ -142,10 +148,10 @@ class Base_Shape {
   }
   
   duplicateLayer(){
-    this.newLayer = new Konva.Layer();
-    this.newLayer.add(this.baseImage.clone());
+    let newLayer = new Konva.Layer();
+    newLayer.add(this.baseImage.clone());
     
-    return this.newLayer;
+    return newLayer;
   }
 
  

@@ -1,77 +1,106 @@
 'use-strict';
 
-let base_ref, crop_ref, shadow_ref;
+let Base_ref, Crop_ref, Shadow_layer;
 
-const stage = new Konva.Stage({
+const STAGE = new Konva.Stage({
   container: 'container',
   width: 500,
   height: 500
 });
 
-const buildCropLayer = () => {
-}
-
-document.getElementById("save").onclick = () => {
-  let json = stage.toJSON()
-  console.log(json);
-}
 
 document.getElementById("resize").onclick = () => {
-  let anchor = base_ref.resize();
-  stage.add(anchor);
+  let anchor = Base_ref.resize();
+  STAGE.add(anchor);
 }
 
 document.getElementById("crop").onclick = () => {
-  let baseImage = base_ref.baseImage;
-  let shadowLayer = base_ref.duplicateLayer();
-  shadowLayer.setClip({
-    x: 80,
-    y: 80,
-    width: 20,
-    height: 20
-  });
-  shadowLayer.setClip({
-    x: 160,
-    y: 160,
-    width: 20,
-    height: 20
-  });
+  let baseImage = Base_ref.baseImage;
+  Shadow_layer = Base_ref.duplicateLayer();
   
-  stage.add(shadowLayer);
-  
-  base_ref.darken(true);
+  STAGE.add(Shadow_layer);
+  Base_ref.darken(true);
   
   let crop = new Konva.Rect({
     x: baseImage.getX(),
     y: baseImage.getY(),
-    fill: 'rgba(255, 255, 255, 0.3)',
+    fill: 'rgba(255, 255, 255, 0.0)',
     width: baseImage.getWidth(),
     height: baseImage.getHeight(),
-    draggable: true
+    draggable: true,
+    dragBoundFunc: function(pos){
+      let x=pos.x, y=pos.y;
+      let boundX=baseImage.getX(), boundY=baseImage.getY();
+      let height=baseImage.getHeight(), width=baseImage.getWidth();
+      let myH = this.getHeight(), myW = this.getWidth();
+      if (x < boundX) x = boundX;
+      if (y < boundY) y = boundY;
+      // console.log(height, width)
+      if (x+myW > width+boundX ) x = boundX+(width-myW);
+      if (y+myH > height+boundY ) y = boundY+(height-myH);
+      return {
+        x: x, y: y
+      }
+    }
   });
   
-  crop_ref = new Base_Shape(crop);
+  Crop_ref = new Base_Shape(crop);
   
-  // crop_ref.darken(false);
-  stage.add(crop_ref.buildPicture());
-  stage.add(crop_ref.resize());
+  // register listener to resize handler
+  STAGE.add(Crop_ref.buildPicture());
+  STAGE.add(Crop_ref.resize());
   
-  crop_ref.anchorLayer.on('dragmove', () => {
-    
-    
-  })
+  let crop_base = Crop_ref.baseImage;
+  // let shadow_img = Shadow_layer.find('.img');
+  const shadowResize = () => {
+    Shadow_layer.setClip({
+      x: crop_base.getX(),
+      y: crop_base.getY(),
+      width: crop_base.getWidth(),
+      height: crop_base.getHeight()
+    });
+    Shadow_layer.draw();
+  }
+  
+  Crop_ref.anchorLayer.on('dragmove', () => {
+    shadowResize()
+  });
+  Crop_ref.layer.on('dragmove', () => {
+    shadowResize()
+  });
+  
 }
+
+
+const stop = () => {
+  if (Crop_ref){
+    Crop_ref.destroyAll();
+    Base_ref.darken(false);
+  }
+  if (Shadow_layer){
+    Shadow_layer.destroy()
+  }
+  Base_ref.baseImage.setDraggable(false);
+  Base_ref.anchorLayer.destroy();
+}
+
+document.getElementById("save").onclick = () => {
+  // let json = STAGE.toJSON()
+  // console.log(json);
+  let coor = [Crop_ref.baseImage.getX(), Crop_ref.baseImage.getY()]
+  let size = [Crop_ref.baseImage.getWidth(), Crop_ref.baseImage.getHeight()]
+  // console.log(coor, size)
+  Base_ref.cropPicture(coor, size);
+  
+  stop();
+}
+
 
 document.getElementById("stop").onclick = () => {
-  if(crop_ref){
-    crop_ref.destroyAll();
-    base_ref.darken(false);
-  }
-  base_ref.baseImage.setDraggable(false);
-  base_ref.anchorLayer.destroy();
+  stop()
 }
 
-// ==== main ====
+// ==== MAIN ====
 
 let imageObj = new Image();
 imageObj.src = './big_flowers.jpg';
@@ -82,11 +111,12 @@ let image_obj = new Konva.Image({
   width: 300,
   height: 300,
   draggable: false,
+  id: 'img'
 });
 
 imageObj.onload = () => {
-  base_ref = new Base_Shape(image_obj);
-  let base_layer = base_ref.buildPicture();
-  stage.add(base_layer);
+  Base_ref = new Base_Shape(image_obj);
+  let base_layer = Base_ref.buildPicture();
+  STAGE.add(base_layer);
 }
 

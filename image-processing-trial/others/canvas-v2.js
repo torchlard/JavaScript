@@ -8,6 +8,7 @@ Array.prototype.min = function(){
   return Math.min.apply(null, this);
 }
 
+// construct class to bind image, anchor together
 class PicAnchor {
   constructor(image, layer, anchor){
     this.image = image;
@@ -134,7 +135,7 @@ const getImage = imageObj =>
     draggable: false,
   });
   
-const stage = new Konva.Stage({
+const STAGE = new Konva.STAGE({
   container: 'container',
   width: 500,
   height: 500
@@ -151,12 +152,12 @@ imageObj.onload = () => {
   let baseImage = getImage(imageObj)
   let layer = new Konva.Layer()
   layer.add(baseImage)
-  stage.add(layer);
+  STAGE.add(layer);
   baseRef = new PicAnchor(baseImage, layer, new Konva.Layer())
 }
 
 // document.getElementById("save").onclick = () => {
-//   let json = stage.toJSON()
+//   let json = STAGE.toJSON()
 //   console.log(json);
 // }
 
@@ -175,7 +176,7 @@ document.getElementById("resizeBaseImage").onclick = () => {
   movePicWithAnchor(baseImage, anchorLayer);
   baseImage.setDraggable(true);
 
-  stage.add(anchorLayer);
+  STAGE.add(anchorLayer);
 }
 
 document.getElementById("crop").onclick = () => {
@@ -183,8 +184,6 @@ document.getElementById("crop").onclick = () => {
 }
 
 document.getElementById("stop").onclick = () => {
-  // let context = anchorLayer.getContext();
-  // context.clear()
   baseRef.image.setDraggable(false);
   baseRef.anchorLayer.destroy()
 }
