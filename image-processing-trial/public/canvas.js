@@ -8,6 +8,25 @@ const STAGE = new Konva.Stage({
   height: 500
 });
 
+const imageTemplate = imageObj => new Konva.Image({
+  x: 10,
+  y: 10,
+  image: imageObj,
+  // width: 200,
+  // height: 200,
+  draggable: false,
+  id: 'img'
+});
+
+// load picture from url to node
+const loadPicToStage = src => {
+  let imageObj = new Image();
+  imageObj.src = src;
+
+  imageObj.onload = () => {
+    Base_ref = new Base_Shape(imageTemplate(imageObj), STAGE);
+  }
+}
 
 document.getElementById("resize").onclick = () => {
   let anchor = Base_ref.resize();
@@ -46,10 +65,9 @@ document.getElementById("crop").onclick = () => {
     }
   });
 
-  Crop_ref = new Base_Shape(crop);
+  Crop_ref = new Base_Shape(crop, STAGE);
 
   // register listener to resize handler
-  STAGE.add(Crop_ref.buildPicture());
   STAGE.add(Crop_ref.resize());
 
   let crop_base = Crop_ref.baseImage;
@@ -83,7 +101,7 @@ const stop = () => {
   if (Shadow_layer){
     Shadow_layer.destroy()
   }
-  Base_ref.baseImage.setDraggable(false);
+  Base_ref.group.setDraggable(false);
   Base_ref.anchorLayer.destroy();
   Base_ref.layer.draw()
 }
@@ -119,33 +137,46 @@ const changeSaturation = (value) => Base_ref.saturation(value);
 const changeLightness = (value) => Base_ref.lightness(value);
 
 const changeMask = (value) => Base_ref.mask(value);
+const changeNoise = (value) => Base_ref.noise(value);
+const changePixelate = (value) => Base_ref.pixelate(value);
+const changePosterize = (value) => Base_ref.posterize(value);
+const changeAlpha = (value) => Base_ref.alpha(value);
 
-document.getElementById("grey").onclick = () => Base_ref.turnGreyScale()
-document.getElementById("color").onclick = () => Base_ref.turnColorScale()
-document.getElementById("invert").onclick = () => Base_ref.invert()
-document.getElementById("mask").onclick = () => Base_ref.turnMaskScale()
+document.getElementById("grey").onclick = () => Base_ref.turnGreyScale();
+document.getElementById("color").onclick = () => Base_ref.turnColorScale();
+document.getElementById("invert").onclick = () => Base_ref.invert();
+document.getElementById("mask").onclick = () => Base_ref.turnMaskScale();
+document.getElementById("sepia").onclick = () => Base_ref.turnSepia();
+document.getElementById("solarize").onclick = () => Base_ref.turnSolarize();
+document.getElementById("init-paint").onclick = () => {
+  let paint_obj = new Paint(Base_ref, STAGE);
+  Base_ref.appendCanvas(paint_obj);
+}
+document.getElementById("clear-paint").onclick = () => Base_ref.clearPaint();
+document.getElementById("stop-paint").onclick = () => Base_ref.stopPaint(Base_ref);
 
+
+
+// add picture
+const handleFiles = (files) => {
+  console.log(files);
+  for(file of files){
+    // let img = document.createElement("img");
+    let src = window.URL.createObjectURL(file);
+    // console.log(src);
+    // loadPicToStage(src);
+    let imageObj = new Image();
+    imageObj.src = src;
+    Base_ref = new Konva.Image()
+    // imageObj.onload = () => {
+    // }
+  }
+}
 
 
 
 
 // ==== MAIN ====
 
-let imageObj = new Image();
-imageObj.src = './big_flowers.jpg';
-let image_obj = new Konva.Image({
-  x: 10,
-  y: 10,
-  image: imageObj,
-  // width: 200,
-  // height: 200,
-  draggable: false,
-  id: 'img'
-});
-
-imageObj.onload = () => {
-  Base_ref = new Base_Shape(image_obj);
-  let base_layer = Base_ref.buildPicture();
-  STAGE.add(base_layer);
-}
+loadPicToStage('./img/big_flowers.jpg');
 

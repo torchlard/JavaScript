@@ -1,18 +1,15 @@
 body {
-      margin: 0;
-      padding: 0;
-      overflow: hidden;
-    }
+  margin: 0;
+  padding: 0;
+}
 
 #box {
   background-color: #faf5f5;
   border: 1px dotted black;
-  position: absolute;
+  /* overflow: hidden; */
+  width: 500px;
+  height: 500px;
 }
-
-/* canvas {
-  border: 1px dotted black;
-} */
 
 #show-pic {
   display: block;
@@ -20,10 +17,9 @@ body {
   margin: auto;
 }
 
-button {
-  margin-top: 600px;
+#control-btn {
+  margin-top: 10px;
 }
-
 
 .slidingbar {
   display: grid;
@@ -93,3 +89,21 @@ input[type=range]:hover {
 }
 
 
+/* file upload */
+.upload-btn-wrapper {
+  position: relative;
+  overflow: hidden;
+  display: inline-block;
+}
+
+.upload-btn-wrapper:hover {
+
+}
+
+.upload-btn-wrapper input[type=file] {
+  font-size: 100px;
+  position: absolute;
+  left: 0;
+  top: 0;
+  opacity: 0;
+}

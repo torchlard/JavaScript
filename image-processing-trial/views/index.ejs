@@ -4,17 +4,14 @@
   <meta charset="utf-8">
   <title>testing</title>
   <link rel="stylesheet" type="text/css" href="./index.css"></link>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script> 
+  <script src="https://cdn.rawgit.com/konvajs/konva/2.0.2/konva.min.js"></script>
 </head>
 <body>
 
-<!-- <p>hello world</p>
 
-<input type="file" id="take-pic" accept="image/*;capture=camera" >
-<div class="container">
-  <img id="show-pic"/>
-</div> -->
+<!-- <input type="file" id="take-pic" accept="image/*;capture=camera" > -->
 
-<!-- <canvas id="canvas" width="500" height="500">Your browser does not support</canvas> -->
 <div id="box">
   <div id="container">
   </div>
@@ -23,14 +20,40 @@
 <!-- <br>
 <button id="camera">camera</button>
 <video src=""></video> -->
-<button id="crop">crop</button>
-<button id="save">save crop</button>
-<button id="resize">resize</button>
-<button id="stop">stop resize</button>
-<button id="grey">grey</button>
-<button id="color">color</button>
-<button id="invert">invert</button>
-<button id="mask">mask</button>
+
+<div id="control-btn">
+  <button id="crop">crop</button>
+  <button id="save">save crop</button>
+  <button id="resize">resize</button>
+  <button id="stop">stop resize</button>
+  <br>
+  <button id="grey">grey</button>
+  <button id="color">color</button>
+  <button id="invert">invert</button>
+  <button id="mask">mask</button>
+  <button id="sepia">sepia</button>
+  <button id="solarize">solarize</button>
+  <br /><br />
+  <button id="export">Export</button>
+  <div class="upload-btn-wrapper">
+    <button class="btn" id="add_pic">Add picture</button>
+    <input type="file" name="myfile" accept="image/*;capture=camera" multiple onchange="handleFiles(this.files)" />
+  </div>
+  <br />
+  <select id="paint-tool">
+    <option value="brush">Brush</option>
+    <option value="eraser">Eraser</option>
+  </select>
+  <button id="init-paint">paint</button>
+  <button id="clear-paint">clear paint</button>
+  <button id="stop-paint">stop paint</button>
+
+
+  <input type="file" id="take-pic" accept="image/*;capture=camera" style="display:none;">
+
+<img id="fill-img" />
+
+</div>
 
 <div class="slidingbar">
 
@@ -62,29 +85,44 @@
 
   <p>
     <label for="invert">Mask</label>
-    <input id="invert" name="invert" type="range" min=0 max=1 step=0.01 value=0.5 oninput="changeMask(this.value)">
+    <input name="invert" type="range" min=0 max=1 step=0.01 value=0.5 oninput="changeMask(this.value)">
+  </p>
+  <p>
+    <label for="invert">Noise</label>
+    <input name="invert" type="range" min=0 max=1 step=0.01 value=0 oninput="changeNoise(this.value)">
+  </p>
+  <p>
+    <label for="invert">Pixelate</label>
+    <input name="invert" type="range" min=0.001 max=10 step=0.1 value=0 oninput="changePixelate(this.value)">
+  </p>
+  <p>
+    <label for="invert">Posterize</label>
+    <input name="invert" type="range" min=0 max=1 step=0.01 value=1 oninput="changePosterize(this.value)">
   </p>
 
   <p>
     <label for="br">Rotate</label>
     <input id="rot" name="br" type="range" min=0 max=359 value=0 oninput="changeRotation(this.value)">
   </p>
-
-
   <p>
+    <label for="br">Alpha</label>
+    <input type="range" min=0 max=1 value=1 step=0.01 oninput="changeAlpha(this.value)">
+  </p>
+
+  <!-- <p>
     <label for="sepia">Sepia</label>
     <input id="sepia" name="sepia" type="range" min=0 max=100 value=0>
-  </p>
+  </p> -->
 
 </div>
 
 </body>
 <!-- <script type="text/javascript" src="./index.js"></script> -->
 <!-- <script type="module" src="./canvas.js"></script> -->
-<script src="http://cdn.jsdelivr.net/npm/ramda@0.25/dist/ramda.min.js"></script>
-<script src="https://cdn.rawgit.com/konvajs/konva/2.0.2/konva.min.js"></script>
+
 <script src="./base_shape.js"></script>
 <script src="./canvas.js"></script>
+<script src="./Paint.js"></script>
 <!-- <script src="./canvas-v2.js"></script> -->
 
 </html>
