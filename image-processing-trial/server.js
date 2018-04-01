@@ -43,20 +43,20 @@ http.createServer((req, res) => {
   req.setEncoding('utf8')
   req.on('data', (data_write) => {
 
-    // let data2 = decodeURIComponent(data_write.toString('utf8'));
     let data2 = decodeURIComponent(data_write);
-    // remove header 'image='
     data2 = data2.substr(6, data2.length);
-    // console.log(data2);
 
-    fs.writeFile('./public/img/test.png', data2, {encoding: 'base64'}, (err)=>{
+    // unique name for each save
+    let d = new Date();
+    let filename = `img/test_${d.getTime()}.png`;
+    fs.writeFile(`./public/${filename}`, data2, {encoding: 'base64'}, (err)=>{
       if (err) throw err;
       console.log('file saved!');
 
       res.setHeader('Access-Control-Allow-Origin', '*');
       res.setHeader('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE');
       res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
-      res.end('test.png');
+      res.end(filename);
     });
 
   });

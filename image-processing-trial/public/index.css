@@ -7,7 +7,7 @@ body {
   background-color: #faf5f5;
   border: 1px dotted black;
   /* overflow: hidden; */
-  width: 500px;
+  width: 700px;
   height: 500px;
 }
 
@@ -88,6 +88,13 @@ input[type=range]:hover {
   cursor: pointer;
 }
 
+/* input[type=range][orient=vertical][name='pen-alpha']{
+  -webkit-appearance: slider-vertical;
+  width: 8px;
+  height: 175px;
+  padding: 0 5px;
+} */
+
 
 /* file upload */
 .upload-btn-wrapper {
@@ -107,3 +114,13 @@ input[type=range]:hover {
   top: 0;
   opacity: 0;
 }
+
+textarea {
+  display: none;
+}
+
+
+
+
+
+

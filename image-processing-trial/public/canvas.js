@@ -1,10 +1,10 @@
 'use-strict';
 
-let Base_ref, Crop_ref, Shadow_layer;
+let Base_ref, Crop_ref, Shadow_layer, Text_ref;
 
 const STAGE = new Konva.Stage({
   container: 'container',
-  width: 500,
+  width: 700,
   height: 500
 });
 
@@ -29,9 +29,7 @@ const loadPicToStage = src => {
 }
 
 document.getElementById("resize").onclick = () => {
-  let anchor = Base_ref.resize();
-  STAGE.add(anchor);
-  // console.log(Base_ref.baseImage.getWidth(), Base_ref.baseImage.getHeight())
+  Base_ref.resize();
 }
 
 document.getElementById("crop").onclick = () => {
@@ -68,7 +66,7 @@ document.getElementById("crop").onclick = () => {
   Crop_ref = new Base_Shape(crop, STAGE);
 
   // register listener to resize handler
-  STAGE.add(Crop_ref.resize());
+  Crop_ref.resize();
 
   let crop_base = Crop_ref.baseImage;
   // let shadow_img = Shadow_layer.find('.img');
@@ -83,7 +81,7 @@ document.getElementById("crop").onclick = () => {
   }
   // console.log(crop_base.getWidth(),crop_base.getHeight(),crop_base.getX(),crop_base.getY());
 
-  Crop_ref.anchorLayer.on('dragmove', () => {
+  Crop_ref.anchorGroup.on('dragmove', () => {
     shadowResize()
   });
   Crop_ref.layer.on('dragmove', () => {
@@ -102,7 +100,7 @@ const stop = () => {
     Shadow_layer.destroy()
   }
   Base_ref.group.setDraggable(false);
-  Base_ref.anchorLayer.destroy();
+  Base_ref.anchorGroup.destroy();
   Base_ref.layer.draw()
 }
 
@@ -152,10 +150,12 @@ document.getElementById("init-paint").onclick = () => {
   let paint_obj = new Paint(Base_ref, STAGE);
   Base_ref.appendCanvas(paint_obj);
 }
-document.getElementById("clear-paint").onclick = () => Base_ref.clearPaint();
+document.getElementById("clear-paint").onclick = () => Base_ref.clearPaint(1);
 document.getElementById("stop-paint").onclick = () => Base_ref.stopPaint(Base_ref);
 
-
+document.getElementById("input_text").onclick = () => {
+  Text_ref = new CustomText(STAGE);
+}
 
 // add picture
 const handleFiles = (files) => {
@@ -179,4 +179,6 @@ const handleFiles = (files) => {
 // ==== MAIN ====
 
 loadPicToStage('./img/big_flowers.jpg');
+
+$("#colorpicker").farbtastic("#show-color");
 

@@ -15,9 +15,10 @@ class Base_Shape {
     this.baseImage = targetImage;
     this.turnColorScale();
     this.layer = new Konva.Layer();
-    this.anchorLayer = new Konva.Layer();
+    this.anchorGroup = new Konva.Group();
     this.group = new Konva.Group();
     this.stage = stage;
+    // this.img_draw = null;
 
     let base_layer = this.buildPicture();
     this.stage.add(base_layer)
@@ -29,46 +30,47 @@ class Base_Shape {
     this.group.add(this.baseImage);
     this.layer.add(this.group);
 
-    this.baseImage.on('dragmove', () => {
-      let points = this.anchorLayer.find('.anchor');
-      let width = this.baseImage.getWidth(), height = this.baseImage.getHeight();
-      let x = this.baseImage.getX(), y = this.baseImage.getY();
-
-      points[0].setX(x-7); points[0].setY(y-7);
-      points[1].setX(x-7+width); points[1].setY(y-7);
-      points[2].setX(x-7); points[2].setY(y-7+height);
-      points[3].setX(x-7+width); points[3].setY(y-7+height);
-      this.anchorLayer.draw();
-    });
+    // this.baseImage.on('dragmove', () => {
+    //   let points = this.anchorGroup.find('.anchor');
+    //   let width = this.baseImage.getWidth(), height = this.baseImage.getHeight();
+    //   let x = this.baseImage.getX(), y = this.baseImage.getY();
+    //
+    //   points[0].setX(x-7); points[0].setY(y-7);
+    //   points[1].setX(x-7+width); points[1].setY(y-7);
+    //   points[2].setX(x-7); points[2].setY(y-7+height);
+    //   points[3].setX(x-7+width); points[3].setY(y-7+height);
+    //   this.anchorGroup.draw();
+    // });
 
     return this.layer;
   }
 
+  // build all anchor
   resize() {
     let x = this.baseImage.getX(), y = this.baseImage.getY();
     let width = this.baseImage.getWidth(), height = this.baseImage.getHeight();
     let coor = [x,y, x+width,y, x,y+height, x+width,y+height];
-    for(let i=0; i<coor.length; i+=2){
+    for (let i=0; i<coor.length; i+=2){
       this.buildAnchor(coor[i], coor[i+1], i/2);
     }
     this.group.setDraggable(true);
+    this.group.add(this.anchorGroup);
+    this.layer.draw()
 
-    // console.log(this.baseImage);
-    // this.baseImage.remove();
-    // this.layer.add(this.baseImage)
-
-    return this.anchorLayer;
+    // console.log(this.layer);
   }
 
   updatePicture(coor){
+    this.baseImage.cache();
+
     this.baseImage.setX(coor[0]);
     this.baseImage.setY(coor[1]);
     this.baseImage.setWidth(coor[2]);
     this.baseImage.setHeight(coor[3]);
 
-    // console.log(this.layer.getWidth(),this.layer.getHeight());
+    // console.log(this.baseImage);
 
-    this.layer.draw()
+    this.group.draw()
     // this.baseImage.draw()
   }
 
@@ -93,8 +95,8 @@ class Base_Shape {
 
 
   updateAnchor(i){
-    // let point = this.anchorLayer.find(`#${i}`)[0];
-    let point = this.anchorLayer.find('.anchor');
+    // let point = this.anchorGroup.find(`#${i}`)[0];
+    let point = this.anchorGroup.find('.anchor');
     let x = point[i].getX(), y = point[i].getY();
     // console.log(x,y)
     switch(i){
@@ -124,6 +126,7 @@ class Base_Shape {
     return [x_list.min()+7, y_list.min()+7, Math.abs(point[0].getX()-point[1].getX()), Math.abs(point[1].getY()-point[3].getY()) ];
   }
 
+  // build each anchor
   buildAnchor(x,y, i){
 
     let square = new Konva.Rect({
@@ -141,11 +144,11 @@ class Base_Shape {
 
     square.on ('mouseover', () => {
       square.fill('rgb(226,226,226)');
-      this.anchorLayer.draw();
+      this.anchorGroup.draw();
     });
     square.on('mouseout', () => {
       square.fill('rgb(139,139,139)');
-      this.anchorLayer.draw();
+      this.anchorGroup.draw();
     });
 
     square.on('dragmove', () => {
@@ -153,30 +156,28 @@ class Base_Shape {
       this.updatePicture(coor);
     });
 
-    this.anchorLayer.add(square);
+    this.anchorGroup.add(square);
   }
 
   destroyAll(){
     this.layer.destroy();
-    this.anchorLayer.destroy();
+    this.anchorGroup.destroy();
   }
-
-
-  // duplicateLayer(){
-  //   let newLayer = new Konva.Layer();
-  //   newLayer.add(this.baseImage.clone());
-  //
-  //   return newLayer;
-  // }
 
   rotate(theta){
     this.baseImage.rotation(theta)
     this.layer.draw()
   }
 
-  clearPaint(){
+  clearPaint(flag){
     let canvas = this.group.find(".canvas");
-    canvas.destroy();
+    if(canvas) canvas.destroy();
+    if(flag){
+      let img_draw = this.group.find(".img-draw");
+      img_draw.destroy();
+      this.img_draw = undefined;
+    }
+
     this.layer.draw();
   }
 
@@ -185,33 +186,25 @@ class Base_Shape {
   }
 
   stopPaint(ref){
-    // const getFile = (_callback) => _callback();
-
-    // let file = getFile(this.canvas_img.stopPaint)
-    // console.log(file);
     this.canvas_img.stopPaint(ref);
-
-    // return file;
   }
 
+  // add free hand drawing to group
   appendDrawing(src){
     this.clearPaint();
 
     const imageObj = new Image();
     imageObj.src = src;
+    this.img_draw = src;
 
     imageObj.onload = () => {
       const img = new Konva.Image({
-        x: 10,
-        y: 10,
+        x: this.baseImage.getX(),
+        y: this.baseImage.getY(),
         image: imageObj,
-        // width: 200,
-        // height: 200,
         draggable: false,
         name: 'img-draw'
       });
-      // console.log(img);
-      // this.baseImage.destroy()
       this.group.add(img);
       this.layer.draw();
     }

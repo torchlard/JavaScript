@@ -4,8 +4,10 @@
   <meta charset="utf-8">
   <title>testing</title>
   <link rel="stylesheet" type="text/css" href="./index.css"></link>
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script> 
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
   <script src="https://cdn.rawgit.com/konvajs/konva/2.0.2/konva.min.js"></script>
+  <script type="text/javascript" src="./lib/farbtastic/farbtastic.js"></script>
+  <link rel="stylesheet" href="./lib/farbtastic/farbtastic.css" type="text/css" />
 </head>
 <body>
 
@@ -40,18 +42,31 @@
     <input type="file" name="myfile" accept="image/*;capture=camera" multiple onchange="handleFiles(this.files)" />
   </div>
   <br />
+  <button id="input_text">Text</button>
+
+  <br />
   <select id="paint-tool">
     <option value="brush">Brush</option>
+    <option value="pen">Pen</option>
+    <option value="pencil">Pencil</option>
     <option value="eraser">Eraser</option>
   </select>
-  <button id="init-paint">paint</button>
-  <button id="clear-paint">clear paint</button>
-  <button id="stop-paint">stop paint</button>
 
+
+  <label for="pen_width">Pen Width</label>
+  <input name="pen_width" type="range" min=0.5 max=30 step=0.5 value=0.5>
+
+  <button id="init-paint">Paint</button>
+  <button id="clear-paint">Clear paint</button>
+  <button id="stop-paint">Save paint</button>
+  <form style="display:none;">
+    <input type="text" id="show-color" value="#123456" readonly/>
+  </form>
+  <div id="colorpicker"></div>
+  <label for="pen-alpha">opacity</label>
+  <input name="pen-alpha" type="range" min=0 max=1 step="0.01" value=1 />
 
   <input type="file" id="take-pic" accept="image/*;capture=camera" style="display:none;">
-
-<img id="fill-img" />
 
 </div>
 
@@ -109,10 +124,7 @@
     <input type="range" min=0 max=1 value=1 step=0.01 oninput="changeAlpha(this.value)">
   </p>
 
-  <!-- <p>
-    <label for="sepia">Sepia</label>
-    <input id="sepia" name="sepia" type="range" min=0 max=100 value=0>
-  </p> -->
+  <textarea>sample text</textarea>
 
 </div>
 
@@ -121,6 +133,7 @@
 <!-- <script type="module" src="./canvas.js"></script> -->
 
 <script src="./base_shape.js"></script>
+<script src="./Text.js"></script>
 <script src="./canvas.js"></script>
 <script src="./Paint.js"></script>
 <!-- <script src="./canvas-v2.js"></script> -->
