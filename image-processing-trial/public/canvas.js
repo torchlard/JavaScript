@@ -1,6 +1,6 @@
 'use-strict';
 
-let Base_ref, Crop_ref, Shadow_layer, Text_ref;
+let Base_ref, Crop_ref, Shadow_layer, Text_ref=[];
 
 const STAGE = new Konva.Stage({
   container: 'container',
@@ -154,7 +154,7 @@ document.getElementById("clear-paint").onclick = () => Base_ref.clearPaint(1);
 document.getElementById("stop-paint").onclick = () => Base_ref.stopPaint(Base_ref);
 
 document.getElementById("input_text").onclick = () => {
-  Text_ref = new CustomText(STAGE);
+  Text_ref.push(new CustomText(STAGE));
 }
 
 // add picture

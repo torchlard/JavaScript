@@ -25,7 +25,7 @@ class Base_Shape {
   }
 
   buildPicture() {
-    // this.baseImage.shadowColor('green');
+
 
     this.group.add(this.baseImage);
     this.layer.add(this.group);
@@ -95,10 +95,9 @@ class Base_Shape {
 
 
   updateAnchor(i){
-    // let point = this.anchorGroup.find(`#${i}`)[0];
     let point = this.anchorGroup.find('.anchor');
     let x = point[i].getX(), y = point[i].getY();
-    // console.log(x,y)
+
     switch(i){
       case 0:
         point[1].setY(y);
