@@ -1,4 +1,4 @@
-'use strict'
+'use strict';
 
 // allow max, min on array by array.max(), array.min()
 Array.prototype.max = function(){
@@ -9,24 +9,22 @@ Array.prototype.min = function(){
 }
 
 
-class Base_Shape {
+class BaseShape {
 
   constructor(targetImage, stage){
     this.baseImage = targetImage;
-    this.turnColorScale();
+    // this.turnColorScale();
     this.layer = new Konva.Layer();
     this.anchorGroup = new Konva.Group();
     this.group = new Konva.Group();
     this.stage = stage;
     // this.img_draw = null;
 
-    let base_layer = this.buildPicture();
-    this.stage.add(base_layer)
+    // let base_layer = this.buildPicture();
+    // this.stage.add(base_layer)
   }
 
   buildPicture() {
-
-
     this.group.add(this.baseImage);
     this.layer.add(this.group);
 
@@ -46,7 +44,7 @@ class Base_Shape {
   }
 
   // build all anchor
-  resize() {
+  buildAllAnchor() {
     let x = this.baseImage.getX(), y = this.baseImage.getY();
     let width = this.baseImage.getWidth(), height = this.baseImage.getHeight();
     let coor = [x,y, x+width,y, x,y+height, x+width,y+height];
@@ -56,8 +54,6 @@ class Base_Shape {
     this.group.setDraggable(true);
     this.group.add(this.anchorGroup);
     this.layer.draw()
-
-    // console.log(this.layer);
   }
 
   updatePicture(coor){
@@ -68,10 +64,63 @@ class Base_Shape {
     this.baseImage.setWidth(coor[2]);
     this.baseImage.setHeight(coor[3]);
 
-    // console.log(this.baseImage);
-
     this.group.draw()
-    // this.baseImage.draw()
+  }
+
+  startCrop(){
+    const baseImage = this.baseImage;
+    const Shadow_layer = this.layer.clone();
+
+    this.stage.add(Shadow_layer);
+    this.brightness(-0.45);
+
+    const crop = new Konva.Rect({
+      x: baseImage.getX(),
+      y: baseImage.getY(),
+      fill: 'rgba(255, 255, 255, 0.0)',
+      width: baseImage.getWidth(),
+      height: baseImage.getHeight(),
+      draggable: true,
+      dragBoundFunc: function(pos){
+        let x=pos.x, y=pos.y;
+        let boundX=baseImage.getX(), boundY=baseImage.getY();
+        let height=baseImage.getHeight(), width=baseImage.getWidth();
+        let myH = this.getHeight(), myW = this.getWidth();
+        if (x < boundX) x = boundX;
+        if (y < boundY) y = boundY;
+        // console.log(height, width)
+        if (x+myW > width+boundX ) x = boundX+(width-myW);
+        if (y+myH > height+boundY ) y = boundY+(height-myH);
+        return {
+          x: x, y: y
+        }
+      }
+    });
+
+    this.crop_ref = new BaseShape(crop, this.stage);
+
+    // register listener to resize handler
+    this.crop_ref.resize();
+
+    const crop_base = this.crop_ref.baseImage;
+    // let shadow_img = Shadow_layer.find('.img');
+    const shadowResize = () => {
+      Shadow_layer.setClip({
+        x: crop_base.getX(),
+        y: crop_base.getY(),
+        width: crop_base.getWidth(),
+        height: crop_base.getHeight()
+      });
+      Shadow_layer.draw();
+    }
+    // console.log(crop_base.getWidth(),crop_base.getHeight(),crop_base.getX(),crop_base.getY());
+
+    this.crop_ref.anchorGroup.on('dragmove', () => {
+      shadowResize()
+    });
+    this.crop_ref.layer.on('dragmove', () => {
+      shadowResize()
+    });
   }
 
   cropPicture(coor, size){
@@ -91,8 +140,6 @@ class Base_Shape {
 
     this.baseImage.draw();
   }
-
-
 
   updateAnchor(i){
     let point = this.anchorGroup.find('.anchor');
@@ -180,9 +227,6 @@ class Base_Shape {
     this.layer.draw();
   }
 
-  appendCanvas(ref){
-    this.canvas_img = ref
-  }
 
   stopPaint(ref){
     this.canvas_img.stopPaint(ref);
@@ -309,6 +353,8 @@ class Base_Shape {
     this.baseImage.filters([Konva.Filters.Solarize]);
     this.layer.draw()
   }
+
+
 
 }
 

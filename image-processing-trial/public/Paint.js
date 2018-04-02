@@ -1,7 +1,9 @@
 'use strict';
 
-class Paint {
-  constructor(ref, stage){
+class Paint extends BaseShape {
+  constructor(stage){
+    super(targetImage, stage);
+
     this.canvas = document.createElement('canvas');
     this.canvas.width = ref.baseImage.getWidth();
     this.canvas.height = ref.baseImage.getHeight();

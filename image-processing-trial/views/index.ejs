@@ -24,23 +24,23 @@
 <video src=""></video> -->
 
 <div id="control-btn">
-  <button id="crop">crop</button>
-  <button id="save">save crop</button>
-  <button id="resize">resize</button>
-  <button id="stop">stop resize</button>
-  <br>
-  <button id="grey">grey</button>
-  <button id="color">color</button>
-  <button id="invert">invert</button>
-  <button id="mask">mask</button>
-  <button id="sepia">sepia</button>
-  <button id="solarize">solarize</button>
-  <br /><br />
-  <button id="export">Export</button>
+  <button id="crop-btn">crop</button>
+  <button id="save-crop-btn">save crop</button>
+  <button id="resize-btn">resize</button>
+  <button id="save-resize-btn">save resize</button>
+  <button id="export-btn">Export</button>
   <div class="upload-btn-wrapper">
-    <button class="btn" id="add_pic">Add picture</button>
-    <input type="file" name="myfile" accept="image/*;capture=camera" multiple onchange="handleFiles(this.files)" />
+    <button class="btn" id="add-pic-btn">Add picture</button>
+    <input type="file" name="myfile" accept="image/*;capture=camera" multiple />
   </div>
+  <br>
+  <button id="grey-btn">grey</button>
+  <button id="color-btn">color</button>
+  <button id="invert-btn">invert</button>
+  <button id="mask-btn">mask</button>
+  <button id="sepia-btn">sepia</button>
+  <button id="solarize-btn">solarize</button>
+  <br />
 
   <br />
   <button id="input_text">Text</button>
@@ -83,9 +83,9 @@
   <label for="pen_width">Pen Width</label>
   <input name="pen_width" type="range" min=0.5 max=30 step=0.5 value=0.5>
 
-  <button id="init-paint">Paint</button>
+  <button id="start-paint">Paint</button>
   <button id="clear-paint">Clear paint</button>
-  <button id="stop-paint">Save paint</button>
+  <button id="save-paint">Save paint</button>
   <form style="display:none;">
     <input type="text" id="show-color" value="#123456" readonly/>
   </form>
@@ -100,55 +100,55 @@
 <div class="slidingbar">
 
   <p id="first-control">
-    <label for="gs">Brightness</label>
-    <input id="gs" name="gs" type="range" min=-1 max=1 step="0.01" value=0 oninput="changeBrightness(this.value)">
+    <label for="brightness-range">Brightness</label>
+    <input id="brightness-range" type="range" min=-1 max=1 step="0.01" value=0>
   </p>
   <p>
-    <label for="ct">Contrast</label>
-    <input id="ct" name="ct" type="range" min=-100 max=100 value=0 oninput="changeContrast(this.value)">
+    <label for="contrast-range">Contrast</label>
+    <input id="contrast-range" type="range" min=-100 max=100 value=0 >
   </p>
   <p>
     <label for="blur">Blur</label>
-    <input id="blur" name="blur" type="range" min=0 max=10 value=0 oninput="changeBlur(this.value)">
+    <input id="blur-range" type="range" min=0 max=10 value=0 >
   </p>
   <p>
-    <label for="huer">Hue</label>
-    <input id="huer" name="huer" type="range" min=0 max=360 value=0 onchange="changeHue(this.value)">
+    <label for="hue-range">Hue</label>
+    <input id="hue-range" type="range" min=0 max=360 value=0 >
   </p>
   <p>
-    <label for="saturate">Saturate</label>
-    <input id="saturate" name="saturate" type="range" min=0 max=1 value=0 step="0.01" oninput="changeSaturation(this.value)">
-  </p>
-
-  <p>
-    <label for="opacity">Lightness</label>
-    <input id="lightness" name="opacity" type="range" min=-1 max=1 value=0 step="0.01" oninput="changeLightness(this.value)">
+    <label for="saturate-range">Saturate</label>
+    <input id="saturate-range" type="range" min=0 max=1 value=0 step="0.01" >
   </p>
 
   <p>
-    <label for="invert">Mask</label>
-    <input name="invert" type="range" min=0 max=1 step=0.01 value=0.5 oninput="changeMask(this.value)">
-  </p>
-  <p>
-    <label for="invert">Noise</label>
-    <input name="invert" type="range" min=0 max=1 step=0.01 value=0 oninput="changeNoise(this.value)">
-  </p>
-  <p>
-    <label for="invert">Pixelate</label>
-    <input name="invert" type="range" min=0.001 max=10 step=0.1 value=0 oninput="changePixelate(this.value)">
-  </p>
-  <p>
-    <label for="invert">Posterize</label>
-    <input name="invert" type="range" min=0 max=1 step=0.01 value=1 oninput="changePosterize(this.value)">
+    <label for="lightness-range">Lightness</label>
+    <input id="lightness-range" type="range" min=-1 max=1 value=0 step="0.01" >
   </p>
 
   <p>
-    <label for="br">Rotate</label>
-    <input id="rot" name="br" type="range" min=0 max=359 value=0 oninput="changeRotation(this.value)">
+    <label for="mask-range">Mask</label>
+    <input id="mask-range" type="range" min=0 max=1 step=0.01 value=0.5>
   </p>
   <p>
-    <label for="br">Alpha</label>
-    <input type="range" min=0 max=1 value=1 step=0.01 oninput="changeAlpha(this.value)">
+    <label for="noise-range">Noise</label>
+    <input id="noise-range" type="range" min=0 max=1 step=0.01 value=0 >
+  </p>
+  <p>
+    <label for="pixelate-range">Pixelate</label>
+    <input id="pixelate-range" type="range" min=0.001 max=10 step=0.1 >
+  </p>
+  <p>
+    <label for="posterize-range">Posterize</label>
+    <input id="posterize-range" type="range" min=0 max=1 step=0.01 value=1>
+  </p>
+
+  <p>
+    <label for="rotate-range">Rotate</label>
+    <input id="rotate-range" type="range" min=0 max=359 value=0>
+  </p>
+  <p>
+    <label for="alpha-range">Alpha</label>
+    <input id="alpha-range" type="range" min=0 max=1 value=1 step=0.01>
   </p>
 
 </div>
@@ -159,6 +159,7 @@
 <!-- <script type="text/javascript" src="./index.js"></script> -->
 <!-- <script type="module" src="./canvas.js"></script> -->
 
+<script src="./button_handler.js"></script>
 <script src="./base_shape.js"></script>
 <script src="./Text.js"></script>
 <script src="./canvas.js"></script>
