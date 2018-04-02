@@ -30,9 +30,10 @@
   <button id="save-resize-btn">save resize</button>
   <button id="export-btn">Export</button>
   <div class="upload-btn-wrapper">
-    <button class="btn" id="add-pic-btn">Add picture</button>
-    <input type="file" name="myfile" accept="image/*;capture=camera" multiple />
+    <button class="btn" >Add picture</button>
+    <input type="file" name="myfile" id="add-pic-btn" accept="image/*;capture=camera" multiple />
   </div>
+  <button id="delete-pic-btn" >Delete</button>
   <br>
   <button id="grey-btn">grey</button>
   <button id="color-btn">color</button>
@@ -44,18 +45,19 @@
 
   <br />
   <button id="input_text">Text</button>
-  <button id="align_left" class="img_btn"><img src="icon/Align-Left-icon.png" /></button>
-  <button id="align_center" class="img_btn"><img src="icon/Align-Center-icon.png" /></button>
-  <button id="align_right" class="img_btn"><img src="icon/Align-Right-icon.png" /></button>
-  <button id="align_justify" class="img_btn"><img src="icon/Align-JustifyAll-icon.png" /></button>
-  <button id="text_bold" class="img_btn"><img src="icon/Editing-Bold-icon.png" /></button>
-  <button id="text_italic" class="img_btn"><img src="icon/Editing-Italic-icon.png" /></button>
-  <button id="text_underline" class="img_btn"><img src="icon/Editing-Underline-icon.png" /></button>
-  <label for="font_size">Font Size</label>
-  <input name="font_size" type="range" min=5 max=60 step=1 value=25>
+  <button id="align-left-btn" class="img_btn"><img src="icon/Align-Left-icon.png" /></button>
+  <button id="align-center-btn" class="img_btn"><img src="icon/Align-Center-icon.png" /></button>
+  <button id="align-right-btn" class="img_btn"><img src="icon/Align-Right-icon.png" /></button>
+  <button id="align-justify-btn" class="img_btn"><img src="icon/Align-JustifyAll-icon.png" /></button>
+  <button id="text-bold-btn" class="img_btn"><img src="icon/Editing-Bold-icon.png" /></button>
+  <button id="text-italic-btn" class="img_btn"><img src="icon/Editing-Italic-icon.png" /></button>
+  <button id="text-underline-btn" class="img_btn"><img src="icon/Editing-Underline-icon.png" /></button>
 
-  <label for="font-family">Font Family</label>
-  <select id="font-family" name="font-family">
+  <label for="font-size-range">Font Size</label>
+  <input id="font-size-range" type="range" min=5 max=60 step=1 value=25>
+
+  <label for="font-family-select">Font Family</label>
+  <select id="font-family-select" name="font-family">
     <option value="Arial">Arial</option>
     <option value="Arial Black">Arial Black</option>
     <option value="Comic Sans MS">Comic Sans MS</option>
@@ -72,7 +74,7 @@
   </select>
 
   <br />
-  <select id="paint-tool">
+  <select id="paint-tool-select">
     <option value="brush">Brush</option>
     <option value="pen">Pen</option>
     <option value="pencil">Pencil</option>
@@ -80,18 +82,19 @@
   </select>
 
 
-  <label for="pen_width">Pen Width</label>
-  <input name="pen_width" type="range" min=0.5 max=30 step=0.5 value=0.5>
+  <label for="pen-width-range">Pen Width</label>
+  <input id="pen-width-range" type="range" min=0.5 max=30 step=0.5 value=0.5>
 
-  <button id="start-paint">Paint</button>
-  <button id="clear-paint">Clear paint</button>
-  <button id="save-paint">Save paint</button>
+  <button id="start-paint-btn">Paint</button>
+  <button id="clear-paint-btn">Clear paint</button>
+  <button id="save-paint-btn">Save paint</button>
   <form style="display:none;">
     <input type="text" id="show-color" value="#123456" readonly/>
   </form>
+
   <div id="colorpicker"></div>
-  <label for="pen-alpha">opacity</label>
-  <input name="pen-alpha" type="range" min=0 max=1 step="0.01" value=1 />
+  <label for="opacity-range">opacity</label>
+  <input id="opacity-range" type="range" min=0 max=1 step="0.01" value=1 />
 
   <input type="file" id="take-pic" accept="image/*;capture=camera" style="display:none;">
 
@@ -160,10 +163,10 @@
 <!-- <script type="module" src="./canvas.js"></script> -->
 
 <script src="./button_handler.js"></script>
-<script src="./base_shape.js"></script>
+<script src="./Base_Shape.js"></script>
+<script src="./Custom_Image.js"></script>
 <script src="./Text.js"></script>
-<script src="./canvas.js"></script>
 <script src="./Paint.js"></script>
-<!-- <script src="./canvas-v2.js"></script> -->
+<script src="./index.js"></script>
 
 </html>
