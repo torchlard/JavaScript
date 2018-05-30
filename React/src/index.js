@@ -73,7 +73,7 @@ const BasicExample = () => (
           render={ ({match}) => (
             <Redirect push to={`/new/${match.params.str}`} />
         )}/>
-        <Route path="/fly" render={ () => <h3>import antigravity</h3>} />
+        <Route path="/fly" render={ () => <h3>imports antigravity</h3>} />
         <Route path="/new/:str(123|456)"  /* only match 123 or 456 */
           render={ ({match}) => <h1>New: {match.params.str}</h1>}
         />
@@ -252,7 +252,7 @@ styles.rgb = {
 
 ReactDOM.render(
   <BasicExample/>,
-  document.getElementById('app'),
+  document.getElementById('app')
 );
 
 console.log('obj');
