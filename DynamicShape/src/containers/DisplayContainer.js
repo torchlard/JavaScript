@@ -26,14 +26,15 @@ const getSize = (size) => {
 
 const mapStateToProps = state => ({
   color: getColor(state.colorFilter),
-  size: getSize(state.sizeFilter)
+  size: getSize(state.sizeFilter),
+  shapeList: state.shapeList
 })
 
 const mapDispatchToProps = dispatch => ({
-
 })
 
-export default connect(mapStateToProps, mapDispatchToProps)(Display)
+
+export default connect(mapStateToProps, mapDispatchToProps)(DisplayList)
 
 
 

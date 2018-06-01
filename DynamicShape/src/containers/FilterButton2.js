@@ -3,7 +3,7 @@ import {setSizeFilter} from '../actions'
 import {connect} from 'react-redux'
 
 const mapStateToProps = (state, prop) => ({
-  showing: prop.size === state.sizeFilter
+  showing: prop.size === state.sizeFilter || state.shapeList.length === 0
 })
 
 const mapDispatchToProps = (dispatch, prop) => ({

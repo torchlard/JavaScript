@@ -3,7 +3,8 @@ import {setColorFilter} from '../actions'
 import {connect} from 'react-redux'
 
 const mapStateToProps = (state, prop) => ({
-  showing: prop.color === state.colorFilter
+  showing: prop.color === state.colorFilter || 
+    state.shapeList.length === 0
 })
 
 const mapDispatchToProps = (dispatch, prop) => ({
