@@ -5,8 +5,8 @@ const control = ({showing, children, onClick}) => (
   <button
     onClick = {onClick}
     disabled = {showing}
-    style = {{ marginLeft: '4px' }}
-  > {children}
+    style = {{ marginLeft: '4px' }}> 
+    {children}
   </button>
 )
 
@@ -17,9 +17,4 @@ control.propTypes = {
 }
 
 export default control
-
-
-
-
-
 

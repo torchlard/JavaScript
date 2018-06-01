@@ -5,8 +5,8 @@ export const ColorFilter = {
 }
 
 export const SizeFilter = {
-  BIG: '35px',
-  SMALL: '15px'
+  BIG: 'big',
+  SMALL: 'small'
 }
 
 // define functions

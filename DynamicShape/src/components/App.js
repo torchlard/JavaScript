@@ -1,15 +1,15 @@
 import React from 'react'
 import Size from './Size'
 import Colors from './Colors'
-import Display from '../containers/display'
+import Display from '../containers/DisplayContainer'
 
-const App = () => {
+const App = () => (
   <div>
     <Colors/>
     <Size/>
     <Display/>
   </div>
-}
+)
 
 export default App
 

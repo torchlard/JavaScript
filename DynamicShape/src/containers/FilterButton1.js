@@ -1,5 +1,4 @@
-import React from 'react'
-import Controls from './Controls'
+import Controls from '../components/Controls'
 import {setColorFilter} from '../actions'
 import {connect} from 'react-redux'
 
