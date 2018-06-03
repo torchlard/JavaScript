@@ -1,6 +1,6 @@
 import {connect} from 'react-redux'
 import DisplayList from '../components/DisplayList'
-import {ColorFilter, SizeFilter} from '../actions'
+import {ColorFilter, SizeFilter, toggleShapeText} from '../actions'
 
 const getColor = (color) => {
   switch(color){
@@ -27,10 +27,11 @@ const getSize = (size) => {
 const mapStateToProps = state => ({
   color: getColor(state.colorFilter),
   size: getSize(state.sizeFilter),
-  shapeList: state.shapeList
+  shapeList: state.shapeList,
 })
 
 const mapDispatchToProps = dispatch => ({
+  onclick: id => dispatch(toggleShapeText(id))
 })
 
 

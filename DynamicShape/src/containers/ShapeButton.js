@@ -9,12 +9,14 @@ export const AddBtn = connect(
   })
 )(Controls)
 
+
 export const RemoveBtn = connect(
   (state, prop) => ({
-    showing: state.shapeList.length === 0
+    showing: state.shapeList.length === 0,
+    // listing: state.glowList
   }),
   (dispatch, prop) => ({
-    onClick: () => dispatch(removeShapeList(prop.id))
+    onClick: () => dispatch(removeShapeList())
   })
 )(Controls)
 

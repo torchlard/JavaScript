@@ -25,8 +25,16 @@ export const addShapeList = () => ({
 })
 
 export const removeShapeList = () => ({
-  type: 'REMOVE_SHAPE_LIST', id: 1
+  type: 'REMOVE_SHAPE_LIST'
 })
+
+export const toggleShapeText = id => ({
+  type: 'TOGGLE_SHAPE_TEXT', id
+})
+
+export const select
+
+
 
 
 

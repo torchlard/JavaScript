@@ -3,11 +3,10 @@ import PropTypes from 'prop-types'
 
 
 const display = ({color, size}) => (
-  <div>
-    <div style={{ 
-      backgroundColor: color,
-      width:size, height: size }} >
-    </div>
+  <div style={{ 
+    backgroundColor: color,
+    width:size, height: size,
+    margin: '5px' }} >
   </div>
 )
 
