@@ -3,7 +3,7 @@ import {
 } from '../actions'
 
 
-export const searchedSubreddit = (state = '', action) => {
+export const searchedSubreddit = (state = 'reactjs', action) => {
   switch (action.type) {
     case SEARCH_SUBREDDIT:
       return action.subreddit
@@ -19,7 +19,7 @@ const posts = (state={isFetching: false, didInvalidate:false, items:[]}, action)
     case REQUEST_POSTS:
       return {...state, isFetching:true, didInvalidate: false}
     case RECEIVE_POSTS:
-      return {...state, isFetching:false, didInvalidate:false, items: action.post, lastUpdated: action.receiveAt}
+      return {...state, isFetching:false, didInvalidate:false, items: action.posts, lastUpdated: action.receiveAt}
     default:
       return state
   }

@@ -49,15 +49,27 @@ export const requestPosts = subreddit => ({
   type: REQUEST_POSTS, subreddit
 })
 
-export const receivePosts = (subreddit, json) => ({
-  type: RECEIVE_POSTS, subreddit,
-  posts: json.data.children.map(i => i.data),
-  receiveAt: Date.now()
-})
+export const receivePosts = (subreddit, json) => {
+  // post not exist
+  if(!json.data) {
+    return ({
+      type: RECEIVE_POSTS,
+      subreddit,
+      posts: [],
+      receiveAt: Date.now()
+  }) }
+
+  return ({
+    type: RECEIVE_POSTS,
+    subreddit,
+    posts: json.data.children.map(i => i.data),
+    receiveAt: Date.now()
+  })
+} 
 
 const fetchPosts = subreddit => dispatch => {
   dispatch(requestPosts(subreddit))
-  return fetch(`http://www.reddit.com/r/${subreddit}/json`)
+  return fetch(`https://www.reddit.com/r/${subreddit}.json`)
     .then(res => res.json())
     .then(json => dispatch(receivePosts(subreddit, json)))
 }

@@ -1,9 +1,10 @@
 import React, {Component} from 'react'
 import {connect} from 'react-redux'
 import PropTypes from 'prop-types'
-import {searchSubreddit, fetchPostsIfNeeded, invalidateSubreddit} from '../actions'
-import SearchReddit from '../components/SearchReddit'
+import {fetchPostsIfNeeded, invalidateSubreddit} from '../actions'
+import SearchReddit from './SearchReddit'
 import Posts from '../components/Posts'
+
 
 class SearchResult extends Component {
   static propTypes = {
@@ -15,20 +16,22 @@ class SearchResult extends Component {
   }
 
   componentDidMount(){
+    console.log('did mount')
     const {dispatch, searchedSubreddit} = this.props
     dispatch(fetchPostsIfNeeded(searchedSubreddit))
   }
 
   componentWillReceiveProps(nextProps){
+    console.log('will receive',nextProps)
     if(nextProps.searchedSubreddit !== this.props.searchedSubreddit){
       const {dispatch, searchedSubreddit} = nextProps
       dispatch(fetchPostsIfNeeded(searchedSubreddit))
     }
   }
 
-  handleChange = nextSubreddit => {
-    this.props.dispatch(searchSubreddit(nextSubreddit))
-  }
+  // handleChange = nextSubreddit => {
+  //   this.props.dispatch(searchSubreddit(nextSubreddit))
+  // }
 
   handleRefreshClick = e => {
     e.preventDefault()
@@ -39,16 +42,16 @@ class SearchResult extends Component {
   }
   
   render(){
-    const {searchedSubreddit, posts, isFetching, lastUpdated} = this.props
+    const { posts, isFetching, lastUpdated} = this.props
     const isEmpty = posts.length === 0
     return (
       <div>
-        <SearchReddit value={searchedSubreddit} onChange={this.handleChange}/>
+        <SearchReddit />
         <p>{lastUpdated && <span>
-          Last updated at {new Date(lastUpdated).toLocaleTimeString}.{' '}
+          Last updated at {new Date(lastUpdated).toLocaleTimeString()}.{' '}
         </span>}
-        <button onClick={this.handleRefreshClick}>Refresh</button>
         </p>
+        <button onClick={this.handleRefreshClick}>Refresh</button>
         {isEmpty ? (isFetching ? <h2>Loading... pls wait</h2> : <h2>Empty</h2>)
         : <div style={{opacity: isFetching ? 0.5 : 1}}>
             <Posts posts={posts}/>
@@ -57,7 +60,6 @@ class SearchResult extends Component {
       </div>
     )
   }
-  
 }
 
 
