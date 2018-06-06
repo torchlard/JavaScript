@@ -30,4 +30,3 @@ export const deleteChild = (nodeId, childId) => ({
   type: DELETE_CHILD, nodeId, childId
 })
 
-

@@ -15,9 +15,9 @@ const node = (state, action) => {
         ...state, counter: state.counter--
       }
     case ADD_CHILD:
-      return [...state, action.childId]
+      return {...state, childIds:[...state, action.childId]}
     case DELETE_CHILD:
-      return state.filter(id => id !== action.childId )
+      return {...state, childIds: state.filter(id => id !== action.childId )}
     default:
       return state
   }
@@ -32,7 +32,7 @@ const getDescendants = (state, nodeId) => {
 
 const deleteMany = (state, ids) => {
   state = {...state}
-  ids.forEach(ids => delete state[id])
+  ids.forEach(id => delete state[id])
   return state
 }
 
@@ -41,7 +41,7 @@ export default (state={}, action) => {
   if(typeof nodeId === undefined){
     return state
   }
-  if(action.type === DELETE_CHILD){
+  if(action.type === DELETE_NODE){
     const descendant = getDescendants(state, nodeId)
     return deleteMany(state, [nodeId, ...descendant])
   }

@@ -54,7 +54,9 @@ class SearchResult extends Component {
         <button onClick={this.handleRefreshClick}>Refresh</button>
         {isEmpty ? (isFetching ? <h2>Loading... pls wait</h2> : <h2>Empty</h2>)
         : <div style={{opacity: isFetching ? 0.5 : 1}}>
-            <Posts posts={posts}/>
+            {posts.map((post,i) => (
+              <Posts post={post} id={i} counter={0} childIds={[]}/>
+            ))}
           </div>
         }
       </div>
