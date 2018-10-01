@@ -3,14 +3,17 @@ const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 const HtmlWebpackPluginConfig = new HtmlWebpackPlugin({
-  template: `${__dirname}/src/index.html`,
+  // change here to switch project directory
+  template: `${__dirname}/src-redux/index.html`, 
   filename: 'index.html',
   inject: 'body'
 });
 
 module.exports = {
+  mode: "development",
   entry: [
-    './src/index.js'
+    // change here to switch project directory
+    './src-redux/index.js'
   ],
   output: {
     path: `${__dirname}/dist`,
@@ -34,6 +37,7 @@ module.exports = {
     // }
   ]
   },
+  // where to find js library
   resolve: {
     extensions: ['.js','.jsx'],
     modules: [path.resolve('./node_modules'), path.resolve('./src')],

@@ -35,7 +35,7 @@ const BasicExample = () => (
       <AuthButton />
       <ul style={{
         padding: '10px',
-        width: "20%",
+        width: "40%",
         background: "#f0f0f0"
       }}>
         <li><Link to="/">Home</Link></li>
@@ -44,7 +44,7 @@ const BasicExample = () => (
             pathname: "/about",
             search: '?sort=name',
             state: { price: 18}
-          }}>About</Link>
+          }}>Abouts</Link>
         </li>
         <li><Link to="/topics">Topics</Link></li>
         <li><Link to="/fly">Fly</Link></li>
@@ -60,11 +60,11 @@ const BasicExample = () => (
         "float": "right"
       }}>
         <Route exact path="/" component={Home}/> {/* if not exact, it will show everytime */}
-        <Switch>  {/* match first one */}
-          <Route path="/about" component={About}/>
-          <Route path="/about" component={Topics}/>
-          <Route path="/topics" component={Topics}/>
-        </Switch>
+          <Switch>  {/* match first one */}
+            <Route path="/about" component={About}/>
+            <Route path="/about" component={Topics}/>
+            <Route path="/topics" component={Topics}/>
+          </Switch>
         <Route path="/old/:str"
           render={ ({match}) => (
             <Redirect push to={`/new/${match.params.str}`}/>  /* redirect path to new url, match new render */
@@ -225,6 +225,7 @@ const RGB = ({match: {params}}) => (
   <div style={{
     ...styles.fill,
     ...styles.rgb,
+    // background: '#AAA'
     background: `rgb(${params.r}, ${params.g}, ${params.b})`
   }} >
     rgb({params.r}, {params.g}, {params.b})
@@ -245,7 +246,7 @@ styles.content = {
 };
 styles.rgb = {
   ...styles.fill,
-  color: "white",
+  color: "#AAA",
   paddingTop: "20px",
   fontSize: "30px"
 };
