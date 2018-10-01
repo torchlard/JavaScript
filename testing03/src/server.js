@@ -12,7 +12,7 @@ import qs from 'qs'
 const app = Express()
 const port = 3100
 
-const renderFullPage = (html, initialState) => {
+const renderFullPage = (html, preloadedState) => {
   return `
   <!DOCTYPE html>
   <html>
